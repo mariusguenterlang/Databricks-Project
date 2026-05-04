@@ -1,0 +1,16 @@
+{
+  "pages": [
+    {
+      "name": "1daf5d96",
+      "displayName": "Untitled page",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
