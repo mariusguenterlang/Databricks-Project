@@ -1,0 +1,279 @@
+{
+  "datasets": [
+    {
+      "name": "e7718963",
+      "displayName": "stock_time_series",
+      "config": {
+        "version": "1.1",
+        "source": "workspace.gold.stock_time_series",
+        "dimensions": [
+          {
+            "name": "Date",
+            "expr": "source.Date",
+            "displayName": "Date"
+          },
+          {
+            "name": "Close",
+            "expr": "source.Close",
+            "displayName": "Close"
+          },
+          {
+            "name": "High",
+            "expr": "source.High",
+            "displayName": "High"
+          },
+          {
+            "name": "Low",
+            "expr": "source.Low",
+            "displayName": "Low"
+          },
+          {
+            "name": "Open",
+            "expr": "source.Open",
+            "displayName": "Open"
+          },
+          {
+            "name": "Volume",
+            "expr": "source.Volume",
+            "displayName": "Volume"
+          },
+          {
+            "name": "Ticker",
+            "expr": "source.Ticker",
+            "displayName": "Ticker"
+          },
+          {
+            "name": "ingestion_time",
+            "expr": "source.ingestion_time",
+            "displayName": "Ingestion Time"
+          },
+          {
+            "name": "processed_at",
+            "expr": "source.processed_at",
+            "displayName": "Processed At"
+          },
+          {
+            "name": "ma_7d",
+            "expr": "source.ma_7d",
+            "displayName": "Ma 7 D"
+          },
+          {
+            "name": "ma_30d",
+            "expr": "source.ma_30d",
+            "displayName": "Ma 30 D"
+          },
+          {
+            "name": "daily_return",
+            "expr": "source.daily_return",
+            "displayName": "Daily Return"
+          },
+          {
+            "name": "volatility_7d",
+            "expr": "source.volatility_7d",
+            "displayName": "Volatility 7 D"
+          },
+          {
+            "name": "gold_created_at",
+            "expr": "source.gold_created_at",
+            "displayName": "Gold Created At"
+          }
+        ],
+        "measures": [
+          {
+            "name": "count",
+            "expr": "COUNT(*)",
+            "comment": "Represents the total number of rows in the dataset. Use this measure to count all",
+            "displayName": "Count"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "2861c682",
+      "displayName": "Front page",
+      "layout": [
+        {
+          "widget": {
+            "name": "df798cb7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e7718963",
+                  "fields": [
+                    {
+                      "name": "Date",
+                      "expression": "`Date`"
+                    },
+                    {
+                      "name": "avg(Volume)",
+                      "expression": "AVG(`Volume`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "IN_RANGE(`Date`, PARSE_RELATIVE_DATE('now-3M/M', 'FLOOR'), PARSE_RELATIVE_DATE('now/M', 'CEIL'))"
+                    },
+                    {
+                      "expression": "`Ticker` IN ('SPY')"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "Closing Price Trend",
+                "showTitle": true
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "Date",
+                  "axis": {
+                    "hideTitle": false
+                  },
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(Volume)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "70943d30",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e7718963",
+                  "fields": [
+                    {
+                      "name": "daily(Date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `Date`)"
+                    },
+                    {
+                      "name": "sum(Volume)",
+                      "expression": "SUM(`Volume`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`volatility_7d` IN (`volatility_7d`) OR TRUE"
+                    },
+                    {
+                      "expression": "`Ticker` IN ('SPY')"
+                    }
+                  ],
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "DESC",
+                      "expression": "DATE_TRUNC(\"DAY\", `Date`)"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showDescription": true,
+                "description": "Recent Trading Volume SPY:"
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(Volume)"
+                },
+                "period": {
+                  "fieldName": "daily(Date)"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 1,
+            "y": 0,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "b050dceb",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "e7718963",
+                  "fields": [
+                    {
+                      "name": "Close",
+                      "expression": "`Close`"
+                    },
+                    {
+                      "name": "sum(Volume)",
+                      "expression": "SUM(`Volume`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "histogram",
+              "encodings": {
+                "x": {
+                  "fieldName": "Close",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(Volume)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 2,
+            "width": 5,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED"
+    },
+    "applyModeEnabled": false
+  }
+}
