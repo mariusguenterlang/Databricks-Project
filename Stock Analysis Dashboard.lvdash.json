@@ -219,7 +219,7 @@
         },
         {
           "widget": {
-            "name": "b050dceb",
+            "name": "average",
             "queries": [
               {
                 "name": "main_query",
@@ -227,12 +227,17 @@
                   "datasetName": "e7718963",
                   "fields": [
                     {
-                      "name": "Close",
-                      "expression": "`Close`"
+                      "name": "daily_return",
+                      "expression": "`daily_return`"
                     },
                     {
-                      "name": "sum(Volume)",
-                      "expression": "SUM(`Volume`)"
+                      "name": "avg(Volume)",
+                      "expression": "AVG(`Volume`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "IN_RANGE(`Date`, PARSE_RELATIVE_DATE('now-7d/d', 'FLOOR'), PARSE_RELATIVE_DATE('now/d', 'CEIL'))"
                     }
                   ],
                   "disaggregated": false
@@ -241,16 +246,20 @@
             ],
             "spec": {
               "version": 3,
+              "frame": {
+                "showTitle": true,
+                "title": "Daily Return of Average Volume over last 7 days"
+              },
               "widgetType": "histogram",
               "encodings": {
                 "x": {
-                  "fieldName": "Close",
+                  "fieldName": "daily_return",
                   "scale": {
                     "type": "quantitative"
                   }
                 },
                 "y": {
-                  "fieldName": "sum(Volume)",
+                  "fieldName": "avg(Volume)",
                   "scale": {
                     "type": "quantitative"
                   }
